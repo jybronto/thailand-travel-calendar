@@ -342,24 +342,78 @@ body {
 .btn-secondary { background: transparent; border: 1px solid var(--border2); color: var(--text2); }
 .btn-secondary:hover { background: var(--bg2); }
 
-/* ── ADD SECTION ── */
-.add-section {
-  border: 1px dashed var(--border2);
+/* ── ADD BUTTON ── */
+.btn-add-trigger {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 9px 16px;
+  cursor: pointer;
+  width: 100%;
+  letter-spacing: 0.01em;
+  transition: background 0.1s;
+}
+.btn-add-trigger:hover { background: var(--accent-hover); }
+.btn-add-trigger .plus { font-size: 19px; line-height: 1; }
+
+/* ── MODAL ── */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.35);
+  z-index: 200;
+  align-items: center;
+  justify-content: center;
+}
+.modal-overlay.open { display: flex; }
+.modal-box {
+  background: var(--white);
   border-radius: var(--radius);
-  padding: 14px;
-  background: var(--bg);
+  padding: 22px;
+  width: 360px;
+  max-width: calc(100vw - 32px);
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 12px;
+  box-shadow: var(--shadow-lg);
+  animation: modal-in 0.15s ease;
 }
-.add-section-title {
-  font-size: 13px;
+@keyframes modal-in {
+  from { opacity: 0; transform: translateY(8px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border);
+}
+.modal-title {
+  font-size: 15px;
   font-weight: 600;
-  color: var(--text3);
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  font-family: 'DM Mono', monospace;
+  color: var(--text);
 }
+.modal-close {
+  background: none;
+  border: none;
+  font-size: 19px;
+  cursor: pointer;
+  color: var(--text3);
+  line-height: 1;
+  padding: 2px 4px;
+  border-radius: 4px;
+}
+.modal-close:hover { background: var(--bg2); color: var(--text); }
+
 .add-form-input, .add-form-select {
   font-family: 'DM Sans', sans-serif;
   font-size: 14px;
@@ -429,6 +483,56 @@ body {
       <div class="empty-icon">🗓</div>
       <p>Нажми на любой день<br>чтобы увидеть события<br>или добавить новые</p>
     </div>
+  </div>
+</div>
+
+<!-- ADD EVENT MODAL -->
+<div class="modal-overlay" id="add-modal" onclick="closeAddModal(event)">
+  <div class="modal-box">
+    <div class="modal-header">
+      <div class="modal-title">Добавить событие</div>
+      <button class="modal-close" onclick="closeAddModal()">✕</button>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label" style="color:var(--text3)">Тип</label>
+        <select class="add-form-select" id="at">
+          <option value="hotel">🏨 Отель</option>
+          <option value="note">📌 Заметка</option>
+          <option value="flight">✈ Рейс</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label" style="color:var(--text3)">Цвет дня</label>
+        <select class="add-form-select" id="acls">
+          <option value="c-bkk">🟢 Бангкок</option>
+          <option value="c-khm">🟣 Камбоджа</option>
+          <option value="c-samui">🟠 Самуи</option>
+          <option value="c-flight">🔵 Перелёт</option>
+          <option value="normal">⬜ Обычный</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label" style="color:var(--text3)">Название</label>
+      <input class="add-form-input" id="atxt" type="text" placeholder="Например: Hilton Bangkok" />
+    </div>
+    <div class="form-group">
+      <label class="form-label" style="color:var(--text3)">Детали</label>
+      <input class="add-form-input" id="afsub" type="text" placeholder="Доп. информация" />
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label" style="color:var(--text3)">Заезд / с</label>
+        <input class="add-form-input" type="date" id="afrom" min="2026-07-21" max="2026-08-10" />
+      </div>
+      <div class="form-group">
+        <label class="form-label" style="color:var(--text3)">Выезд / по</label>
+        <input class="add-form-input" type="date" id="ato" min="2026-07-21" max="2026-08-10" />
+      </div>
+    </div>
+    <div class="nights-hint" id="anhint"></div>
+    <button class="btn-add" onclick="addEv()">Добавить</button>
   </div>
 </div>
 
@@ -597,52 +701,23 @@ function openDay(k) {
     });
   }
 
-  html += `<div class="add-section">
-    <div class="add-section-title">+ Добавить событие</div>
-    <div class="form-row">
-      <div class="form-group">
-        <label class="form-label" style="color:var(--text3)">Тип</label>
-        <select class="add-form-select" id="at">
-          <option value="hotel">🏨 Отель</option>
-          <option value="note">📌 Заметка</option>
-          <option value="flight">✈ Рейс</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label class="form-label" style="color:var(--text3)">Цвет дня</label>
-        <select class="add-form-select" id="acls">
-          <option value="c-bkk">🟢 Бангкок</option>
-          <option value="c-khm">🟣 Камбоджа</option>
-          <option value="c-samui">🟠 Самуи</option>
-          <option value="c-flight">🔵 Перелёт</option>
-          <option value="normal">⬜ Обычный</option>
-        </select>
-      </div>
-    </div>
-    <div class="form-group">
-      <label class="form-label" style="color:var(--text3)">Название</label>
-      <input class="add-form-input" id="atxt" type="text" placeholder="Например: Hilton Bangkok" />
-    </div>
-    <div class="form-group">
-      <label class="form-label" style="color:var(--text3)">Детали</label>
-      <input class="add-form-input" id="afsub" type="text" placeholder="Доп. информация" />
-    </div>
-    <div class="form-row">
-      <div class="form-group">
-        <label class="form-label" style="color:var(--text3)">Заезд / с</label>
-        <input class="add-form-input" type="date" id="afrom" value="${k}" min="2026-07-21" max="2026-08-10" />
-      </div>
-      <div class="form-group">
-        <label class="form-label" style="color:var(--text3)">Выезд / по</label>
-        <input class="add-form-input" type="date" id="ato" value="${k}" min="2026-07-21" max="2026-08-10" />
-      </div>
-    </div>
-    <div class="nights-hint" id="anhint"></div>
-    <button class="btn-add" onclick="addEv()">Добавить</button>
-  </div>
+  html += `<button class="btn-add-trigger" onclick="openAddModal('${k}')">
+    <span class="plus">+</span> Добавить событие
+  </button>
   </div>`;
 
   document.getElementById('side-panel').innerHTML = html;
+}
+
+function openAddModal(k) {
+  const modal = document.getElementById('add-modal');
+  document.getElementById('afrom').value = k;
+  document.getElementById('ato').value = k;
+  document.getElementById('atxt').value = '';
+  document.getElementById('afsub').value = '';
+  document.getElementById('anhint').textContent = '';
+  modal.classList.add('open');
+  document.getElementById('atxt').focus();
 
   function upd() {
     const el = document.getElementById('anhint'); if (!el) return;
@@ -652,11 +727,15 @@ function openDay(k) {
       document.getElementById('ato').value
     );
   }
-  document.getElementById('atxt').focus();
-  document.getElementById('atxt').addEventListener('keydown', e => { if (e.key==='Enter') addEv(); });
-  document.getElementById('afrom').addEventListener('input', upd);
-  document.getElementById('ato').addEventListener('input', upd);
-  document.getElementById('at').addEventListener('change', upd);
+  document.getElementById('atxt').onkeydown = e => { if (e.key==='Enter') addEv(); };
+  document.getElementById('afrom').oninput = upd;
+  document.getElementById('ato').oninput = upd;
+  document.getElementById('at').onchange = upd;
+}
+
+function closeAddModal(e) {
+  if (e && e.target !== document.getElementById('add-modal')) return;
+  document.getElementById('add-modal').classList.remove('open');
 }
 
 // ── EDIT ──
@@ -729,6 +808,7 @@ function addEv() {
   const id = 'ev_' + Date.now();
   allEvents[id] = { id, main: t, fsub, label: t.length>13 ? t.slice(0,13)+'…' : t, type, cls, dates };
   saveState();
+  document.getElementById('add-modal').classList.remove('open');
   openDay(selKey); render();
 }
 
