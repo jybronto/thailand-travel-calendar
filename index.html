@@ -176,6 +176,8 @@ body {
   transition: all 0.12s ease;
   background: var(--white);
   border-color: var(--border);
+  min-width: 0;
+  overflow: hidden;
 }
 .cell.empty { background: transparent; border-color: transparent; cursor: default; pointer-events: none; }
 .cell:not(.empty):hover { border-color: var(--border2); transform: translateY(-1px); box-shadow: var(--shadow); }
