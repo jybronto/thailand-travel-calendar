@@ -657,10 +657,9 @@ function render() {
       const dt = fd(k);
       const showMon = dt.getDate()===1 || k===days[0];
       let inner = `<div class="dn">${dt.getDate()}${showMon?`<span class="dm"> ${MSHORT[dt.getMonth()]}</span>`:''}</div>`;
-      evs.slice(0,3).forEach(ev => {
+      evs.forEach(ev => {
         inner += `<div class="ev-chip ${chipCls(ev.cls)}">${ev.main}</div>`;
       });
-      if (evs.length > 3) inner += `<div class="more-chip">+${evs.length-3}</div>`;
       html += `<div class="cell ${cls}${sel}" onclick="openDay('${k}')">${inner}</div>`;
     }
     html += `</div>`;
