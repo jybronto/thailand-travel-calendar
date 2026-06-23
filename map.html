@@ -1,0 +1,921 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Маршрут · Bangkok Trip 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #F7F6F3;
+  --bg2: #EEECEA;
+  --bg3: #E4E2DE;
+  --text: #1A1916;
+  --text2: #6B6860;
+  --text3: #9B9890;
+  --border: #D8D5D0;
+  --border2: #C8C5BF;
+  --white: #FFFFFF;
+
+  --bkk-bg: #E8F5EE;
+  --bkk-border: #7ECBA0;
+  --bkk-text: #0A5232;
+  --bkk-chip: #AAE0C0;
+
+  --khm-bg: #EEEAFC;
+  --khm-border: #A89CE8;
+  --khm-text: #3C2E8A;
+  --khm-chip: #C8C0F0;
+
+  --samui-bg: #FDF0E8;
+  --samui-border: #F0A070;
+  --samui-text: #7A3210;
+  --samui-chip: #F5C4A0;
+
+  --accent: #2563EB;
+  --accent-hover: #1D4ED8;
+  --danger: #DC2626;
+  --danger-bg: #FEF2F2;
+
+  --radius: 10px;
+  --radius-sm: 6px;
+  --shadow: 0 1px 3px rgba(0,0,0,0.08), 0 4px 12px rgba(0,0,0,0.05);
+  --shadow-lg: 0 8px 32px rgba(0,0,0,0.12);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  height: 100%;
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+}
+
+/* ── HEADER ── */
+.app-header {
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
+  padding: 0 24px;
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 1px 8px rgba(0,0,0,0.06);
+  height: 57px;
+}
+.header-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-right: 24px;
+  border-right: 1px solid var(--border);
+}
+.header-brand .plane-icon { font-size: 20px; }
+.header-brand h1 {
+  font-size: 17px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--text);
+  white-space: nowrap;
+}
+.nav-tabs {
+  display: flex;
+  align-items: stretch;
+  margin-left: 8px;
+}
+.nav-tab {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 18px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text2);
+  text-decoration: none;
+  border-bottom: 2px solid transparent;
+  transition: all 0.12s;
+}
+.nav-tab:hover { color: var(--text); }
+.nav-tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+/* ── LAYOUT ── */
+.app-body {
+  display: flex;
+  height: calc(100vh - 57px);
+}
+
+/* ── LEFT PANEL ── */
+.left-panel {
+  width: 340px;
+  flex-shrink: 0;
+  background: var(--white);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* ── API KEY SETUP ── */
+.key-banner {
+  background: #FFFBEB;
+  border-bottom: 1px solid #FDE68A;
+  padding: 12px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.key-banner-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: #92400E;
+}
+.key-banner-desc {
+  font-size: 12px;
+  color: #A16207;
+  line-height: 1.5;
+}
+.key-row {
+  display: flex;
+  gap: 6px;
+}
+.key-input {
+  flex: 1;
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  padding: 6px 8px;
+  border: 1px solid #FDE68A;
+  border-radius: var(--radius-sm);
+  background: #FEFCE8;
+  color: var(--text);
+  outline: none;
+  min-width: 0;
+}
+.key-input:focus { border-color: #F59E0B; }
+.key-btn {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 6px 12px;
+  background: #F59E0B;
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  white-space: nowrap;
+}
+.key-btn:hover { background: #D97706; }
+.key-change-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.key-active-label {
+  font-size: 12px;
+  color: #065F46;
+  font-family: 'DM Mono', monospace;
+}
+.key-change-btn {
+  font-size: 12px;
+  color: var(--text3);
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-decoration: underline;
+}
+.key-change-btn:hover { color: var(--text2); }
+
+/* ── SEARCH FORM ── */
+.panel-section {
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--border);
+}
+.section-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text3);
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  font-family: 'DM Mono', monospace;
+  margin-bottom: 8px;
+}
+.search-row {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+.search-input {
+  flex: 1;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  padding: 7px 10px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--white);
+  color: var(--text);
+  outline: none;
+  min-width: 0;
+}
+.search-input:focus { border-color: var(--accent); }
+.add-btn {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 7px 14px;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  white-space: nowrap;
+}
+.add-btn:hover { background: var(--accent-hover); }
+.add-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+.cat-select {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  padding: 5px 8px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--white);
+  color: var(--text);
+  width: 100%;
+  outline: none;
+}
+.cat-select:focus { border-color: var(--accent); }
+
+/* ── POI LIST ── */
+.poi-scroll {
+  flex: 1;
+  overflow-y: auto;
+  padding: 10px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.poi-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 100%;
+  color: var(--text3);
+  text-align: center;
+  padding: 20px;
+}
+.poi-empty .ei { font-size: 28px; }
+.poi-empty p { font-size: 14px; line-height: 1.6; }
+.poi-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 7px 8px 7px 4px;
+  cursor: grab;
+  transition: box-shadow 0.1s, border-color 0.1s;
+  user-select: none;
+}
+.poi-item:active { cursor: grabbing; }
+.poi-item.drag-over { border-color: var(--accent); box-shadow: 0 0 0 2px rgba(37,99,235,0.15); }
+.poi-item.dragging { opacity: 0.45; }
+.poi-num {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 700;
+  flex-shrink: 0;
+  font-family: 'DM Mono', monospace;
+}
+.poi-name {
+  flex: 1;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+}
+.poi-cat-tag {
+  font-size: 11px;
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-weight: 500;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.poi-del {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 3px 5px;
+  font-size: 13px;
+  color: var(--text3);
+  border-radius: 4px;
+  line-height: 1;
+  flex-shrink: 0;
+}
+.poi-del:hover { background: var(--danger-bg); color: var(--danger); }
+.drag-handle {
+  cursor: grab;
+  color: var(--text3);
+  font-size: 13px;
+  line-height: 1;
+  flex-shrink: 0;
+  padding: 2px;
+}
+
+/* ── BOTTOM CONTROLS ── */
+.bottom-controls {
+  border-top: 1px solid var(--border);
+  padding: 12px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.travel-modes {
+  display: flex;
+  gap: 4px;
+}
+.mode-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  padding: 7px 4px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--white);
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text2);
+  transition: all 0.1s;
+}
+.mode-btn:hover { background: var(--bg2); border-color: var(--border2); }
+.mode-btn.active { background: #EFF6FF; border-color: #93C5FD; color: var(--accent); }
+.mode-btn .mode-ico { font-size: 15px; }
+.calc-btn {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 9px;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  width: 100%;
+  transition: background 0.1s;
+}
+.calc-btn:hover { background: var(--accent-hover); }
+.calc-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.clear-btn {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  padding: 7px;
+  background: transparent;
+  color: var(--text3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  width: 100%;
+  transition: all 0.1s;
+}
+.clear-btn:hover { background: var(--danger-bg); color: var(--danger); border-color: #FCA5A5; }
+
+/* ── ROUTE RESULT ── */
+.route-result {
+  display: flex;
+  gap: 8px;
+}
+.route-stat {
+  flex: 1;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 8px 10px;
+  text-align: center;
+}
+.route-stat-val {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text);
+  font-family: 'DM Mono', monospace;
+}
+.route-stat-label {
+  font-size: 11px;
+  color: var(--text3);
+  margin-top: 1px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.route-legs {
+  font-size: 11px;
+  color: var(--text3);
+  font-family: 'DM Mono', monospace;
+  line-height: 1.7;
+}
+
+/* ── MAP ── */
+#map {
+  flex: 1;
+  position: relative;
+}
+.map-placeholder {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  color: var(--text3);
+  background: var(--bg);
+  pointer-events: none;
+}
+.map-placeholder .mp-icon { font-size: 48px; }
+.map-placeholder p { font-size: 15px; line-height: 1.6; text-align: center; }
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text3); }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 768px) {
+  .app-body { flex-direction: column; }
+  .left-panel { width: 100%; height: auto; border-right: none; border-bottom: 1px solid var(--border); }
+  #map { min-height: 400px; }
+  .header-brand h1 { display: none; }
+}
+
+/* Google autocomplete dropdown z-index */
+.pac-container { z-index: 9999; }
+</style>
+</head>
+<body>
+
+<header class="app-header">
+  <div class="header-brand">
+    <span class="plane-icon">✈</span>
+    <h1>Bangkok Trip 2026</h1>
+  </div>
+  <nav class="nav-tabs">
+    <a href="index.html" class="nav-tab">🗓 Календарь</a>
+    <a href="map.html"   class="nav-tab active">🗺 Маршрут</a>
+  </nav>
+</header>
+
+<div class="app-body">
+
+  <!-- ── LEFT PANEL ── -->
+  <div class="left-panel">
+
+    <!-- API Key setup -->
+    <div id="key-banner" class="key-banner">
+      <div class="key-banner-title">🔑 Нужен Google Maps API ключ</div>
+      <div class="key-banner-desc">
+        Получи ключ на <strong>console.cloud.google.com</strong> (включи Maps JS API + Directions API + Places API).
+      </div>
+      <div class="key-row">
+        <input class="key-input" id="key-input" type="text" placeholder="AIzaSy..." />
+        <button class="key-btn" onclick="applyKey()">Загрузить</button>
+      </div>
+    </div>
+    <div id="key-active" style="display:none" class="key-banner" style="background:#ECFDF5;border-bottom-color:#6EE7B7">
+      <div class="key-change-row">
+        <span class="key-active-label">✅ Google Maps подключён</span>
+        <button class="key-change-btn" onclick="resetKey()">Сменить ключ</button>
+      </div>
+    </div>
+
+    <!-- Add POI -->
+    <div class="panel-section">
+      <div class="section-label">Добавить точку</div>
+      <div class="search-row">
+        <input class="search-input" id="search-input" type="text" placeholder="Название места..." autocomplete="off" />
+        <button class="add-btn" id="add-btn" onclick="addCurrentPlace()" disabled>+</button>
+      </div>
+      <select class="cat-select" id="cat-select">
+        <option value="bkk">🟢 Бангкок</option>
+        <option value="khm">🟣 Камбоджа</option>
+        <option value="samui">🟠 Самуи</option>
+        <option value="other">⬜ Другое</option>
+      </select>
+    </div>
+
+    <!-- POI list -->
+    <div class="poi-scroll" id="poi-list">
+      <div class="poi-empty">
+        <div class="ei">📍</div>
+        <p>Добавь точки маршрута<br>и нажми «Рассчитать»</p>
+      </div>
+    </div>
+
+    <!-- Bottom controls -->
+    <div class="bottom-controls">
+
+      <div id="route-result" style="display:none">
+        <div class="route-result">
+          <div class="route-stat">
+            <div class="route-stat-val" id="res-dist">—</div>
+            <div class="route-stat-label">Расстояние</div>
+          </div>
+          <div class="route-stat">
+            <div class="route-stat-val" id="res-time">—</div>
+            <div class="route-stat-label">Время</div>
+          </div>
+        </div>
+        <div class="route-legs" id="res-legs" style="margin-top:8px"></div>
+      </div>
+
+      <div class="travel-modes">
+        <button class="mode-btn active" data-mode="DRIVING"  onclick="setMode(this)">
+          <span class="mode-ico">🚗</span> Авто
+        </button>
+        <button class="mode-btn" data-mode="WALKING"  onclick="setMode(this)">
+          <span class="mode-ico">🚶</span> Пешком
+        </button>
+        <button class="mode-btn" data-mode="TRANSIT"  onclick="setMode(this)">
+          <span class="mode-ico">🚌</span> Транзит
+        </button>
+      </div>
+
+      <button class="calc-btn" id="calc-btn" onclick="calcRoute()" disabled>
+        Рассчитать маршрут
+      </button>
+      <button class="clear-btn" onclick="clearRoute()">Очистить маршрут</button>
+    </div>
+  </div>
+
+  <!-- ── MAP ── -->
+  <div id="map">
+    <div class="map-placeholder" id="map-placeholder">
+      <div class="mp-icon">🗺</div>
+      <p>Введи Google Maps API ключ<br>чтобы загрузить карту</p>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ── STATE ──
+let pois = [];
+let travelMode = 'DRIVING';
+let mapInstance = null;
+let directionsService = null;
+let directionsRenderer = null;
+let markers = [];
+let autocomplete = null;
+let pendingPlace = null; // place from autocomplete
+
+const CAT_META = {
+  bkk:   { label: 'Бангкок',  color: '#0A5232', bg: '#AAE0C0' },
+  khm:   { label: 'Камбоджа', color: '#3C2E8A', bg: '#C8C0F0' },
+  samui: { label: 'Самуи',    color: '#7A3210', bg: '#F5C4A0' },
+  other: { label: 'Другое',   color: '#444',    bg: '#E5E7EB' },
+};
+
+const NUM_COLORS = ['#2563EB','#16A34A','#D97706','#DC2626','#7C3AED','#0891B2','#BE185D','#65A30D'];
+
+// ── PERSISTENCE ──
+function savePOIs() {
+  try { localStorage.setItem('tc_map_pois', JSON.stringify(pois)); } catch(e) {}
+}
+function loadPOIs() {
+  try {
+    const s = localStorage.getItem('tc_map_pois');
+    if (s) pois = JSON.parse(s);
+  } catch(e) {}
+}
+
+// ── API KEY ──
+function getKey() {
+  return localStorage.getItem('tc_gmaps_key') || '';
+}
+function applyKey() {
+  const k = document.getElementById('key-input').value.trim();
+  if (!k) return;
+  localStorage.setItem('tc_gmaps_key', k);
+  loadMapsAPI(k);
+}
+function resetKey() {
+  localStorage.removeItem('tc_gmaps_key');
+  location.reload();
+}
+function showKeyBanner(loaded) {
+  document.getElementById('key-banner').style.display = loaded ? 'none' : 'flex';
+  document.getElementById('key-active').style.display  = loaded ? 'block' : 'none';
+}
+
+// ── LOAD MAPS API ──
+function loadMapsAPI(key) {
+  if (document.getElementById('gmaps-script')) return;
+  const s = document.createElement('script');
+  s.id  = 'gmaps-script';
+  s.src = `https://maps.googleapis.com/maps/api/js?key=${encodeURIComponent(key)}&libraries=places&callback=initMap`;
+  s.async = true;
+  s.onerror = () => {
+    alert('Не удалось загрузить Google Maps. Проверь API ключ.');
+    localStorage.removeItem('tc_gmaps_key');
+    showKeyBanner(false);
+  };
+  document.head.appendChild(s);
+}
+
+// ── INIT MAP ──
+window.initMap = function() {
+  showKeyBanner(true);
+  document.getElementById('map-placeholder').style.display = 'none';
+
+  mapInstance = new google.maps.Map(document.getElementById('map'), {
+    center: { lat: 13.7563, lng: 100.5018 }, // Bangkok
+    zoom: 12,
+    mapTypeControl: false,
+    streetViewControl: false,
+    fullscreenControlOptions: { position: google.maps.ControlPosition.RIGHT_BOTTOM },
+  });
+
+  directionsService  = new google.maps.DirectionsService();
+  directionsRenderer = new google.maps.DirectionsRenderer({
+    suppressMarkers: true,
+    polylineOptions: { strokeColor: '#2563EB', strokeWeight: 4, strokeOpacity: 0.8 },
+  });
+  directionsRenderer.setMap(mapInstance);
+
+  // Places autocomplete
+  const input = document.getElementById('search-input');
+  autocomplete = new google.maps.places.Autocomplete(input, {
+    fields: ['geometry', 'name', 'formatted_address'],
+  });
+  autocomplete.addListener('place_changed', () => {
+    const place = autocomplete.getPlace();
+    if (place && place.geometry) {
+      pendingPlace = place;
+      document.getElementById('add-btn').disabled = false;
+    } else {
+      pendingPlace = null;
+      document.getElementById('add-btn').disabled = true;
+    }
+  });
+  input.addEventListener('input', () => {
+    if (!input.value.trim()) {
+      pendingPlace = null;
+      document.getElementById('add-btn').disabled = true;
+    }
+  });
+  input.addEventListener('keydown', e => {
+    if (e.key === 'Enter' && pendingPlace) addCurrentPlace();
+  });
+
+  // Load saved POIs and re-render markers
+  loadPOIs();
+  renderPOIList();
+  if (pois.length) placeMarkers();
+  updateCalcBtn();
+};
+
+// ── ADD POI ──
+function addCurrentPlace() {
+  if (!pendingPlace) return;
+  const cat = document.getElementById('cat-select').value;
+  const poi = {
+    id:   'poi_' + Date.now(),
+    name: pendingPlace.name || pendingPlace.formatted_address,
+    lat:  pendingPlace.geometry.location.lat(),
+    lng:  pendingPlace.geometry.location.lng(),
+    cat,
+  };
+  pois.push(poi);
+  savePOIs();
+  document.getElementById('search-input').value = '';
+  pendingPlace = null;
+  document.getElementById('add-btn').disabled = true;
+  renderPOIList();
+  placeMarkers();
+  updateCalcBtn();
+
+  // Pan map to new point
+  mapInstance.panTo({ lat: poi.lat, lng: poi.lng });
+  if (mapInstance.getZoom() < 12) mapInstance.setZoom(12);
+}
+
+// ── REMOVE POI ──
+function removePOI(id) {
+  pois = pois.filter(p => p.id !== id);
+  savePOIs();
+  renderPOIList();
+  placeMarkers();
+  updateCalcBtn();
+  clearRouteDisplay();
+}
+
+// ── REORDER (drag and drop) ──
+let dragSrcIdx = null;
+
+function onDragStart(e, idx) {
+  dragSrcIdx = idx;
+  e.dataTransfer.effectAllowed = 'move';
+  e.currentTarget.classList.add('dragging');
+}
+function onDragEnd(e) {
+  e.currentTarget.classList.remove('dragging');
+  document.querySelectorAll('.poi-item').forEach(el => el.classList.remove('drag-over'));
+}
+function onDragOver(e, idx) {
+  e.preventDefault();
+  e.dataTransfer.dropEffect = 'move';
+  document.querySelectorAll('.poi-item').forEach((el, i) => {
+    el.classList.toggle('drag-over', i === idx);
+  });
+}
+function onDrop(e, idx) {
+  e.preventDefault();
+  if (dragSrcIdx === null || dragSrcIdx === idx) return;
+  const moved = pois.splice(dragSrcIdx, 1)[0];
+  pois.splice(idx, 0, moved);
+  dragSrcIdx = null;
+  savePOIs();
+  renderPOIList();
+  placeMarkers();
+  clearRouteDisplay();
+}
+
+// ── RENDER POI LIST ──
+function renderPOIList() {
+  const list = document.getElementById('poi-list');
+  if (!pois.length) {
+    list.innerHTML = `<div class="poi-empty"><div class="ei">📍</div><p>Добавь точки маршрута<br>и нажми «Рассчитать»</p></div>`;
+    return;
+  }
+  list.innerHTML = pois.map((p, i) => {
+    const meta  = CAT_META[p.cat] || CAT_META.other;
+    const color = NUM_COLORS[i % NUM_COLORS.length];
+    return `<div class="poi-item" draggable="true"
+      ondragstart="onDragStart(event,${i})"
+      ondragend="onDragEnd(event)"
+      ondragover="onDragOver(event,${i})"
+      ondrop="onDrop(event,${i})">
+      <span class="drag-handle">⠿</span>
+      <div class="poi-num" style="background:${color};color:#fff">${i+1}</div>
+      <div class="poi-name" title="${p.name}">${p.name}</div>
+      <span class="poi-cat-tag" style="background:${meta.bg};color:${meta.color}">${meta.label}</span>
+      <button class="poi-del" onclick="removePOI('${p.id}')" title="Удалить">✕</button>
+    </div>`;
+  }).join('');
+}
+
+// ── MARKERS ──
+function placeMarkers() {
+  markers.forEach(m => m.setMap(null));
+  markers = [];
+  pois.forEach((p, i) => {
+    const color = NUM_COLORS[i % NUM_COLORS.length];
+    const marker = new google.maps.Marker({
+      position: { lat: p.lat, lng: p.lng },
+      map: mapInstance,
+      label: {
+        text: String(i + 1),
+        color: '#fff',
+        fontWeight: 'bold',
+        fontFamily: 'DM Mono, monospace',
+        fontSize: '12px',
+      },
+      icon: {
+        path: google.maps.SymbolPath.CIRCLE,
+        scale: 14,
+        fillColor: color,
+        fillOpacity: 1,
+        strokeColor: '#fff',
+        strokeWeight: 2,
+      },
+      title: p.name,
+    });
+    markers.push(marker);
+  });
+
+  // Fit bounds if multiple points
+  if (pois.length > 1) {
+    const bounds = new google.maps.LatLngBounds();
+    pois.forEach(p => bounds.extend({ lat: p.lat, lng: p.lng }));
+    mapInstance.fitBounds(bounds, { top: 40, right: 40, bottom: 40, left: 40 });
+  }
+}
+
+// ── TRAVEL MODE ──
+function setMode(btn) {
+  document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  travelMode = btn.dataset.mode;
+}
+
+// ── CALCULATE ROUTE ──
+function calcRoute() {
+  if (pois.length < 2) return;
+
+  const origin      = { lat: pois[0].lat, lng: pois[0].lng };
+  const destination = { lat: pois[pois.length-1].lat, lng: pois[pois.length-1].lng };
+  const waypoints   = pois.slice(1, -1).map(p => ({
+    location: { lat: p.lat, lng: p.lng },
+    stopover: true,
+  }));
+
+  const btn = document.getElementById('calc-btn');
+  btn.textContent = 'Считаю…';
+  btn.disabled = true;
+
+  directionsService.route({
+    origin,
+    destination,
+    waypoints,
+    travelMode: google.maps.TravelMode[travelMode],
+    optimizeWaypoints: false,
+  }, (result, status) => {
+    btn.textContent = 'Рассчитать маршрут';
+    btn.disabled = false;
+
+    if (status !== 'OK') {
+      alert(`Не удалось построить маршрут: ${status}`);
+      return;
+    }
+
+    directionsRenderer.setDirections(result);
+
+    // Clear our own markers (directions renderer has route markers, but we keep ours)
+    // Actually we suppressed default markers, so ours stay visible
+    placeMarkers();
+
+    // Summarize
+    const legs = result.routes[0].legs;
+    let totalDist = 0, totalDur = 0;
+    const legLines = [];
+    legs.forEach((leg, i) => {
+      totalDist += leg.distance.value;
+      totalDur  += leg.duration.value;
+      legLines.push(`${i+1}→${i+2}  ${leg.distance.text}  ${leg.duration.text}`);
+    });
+
+    document.getElementById('res-dist').textContent = totalDist >= 1000
+      ? (totalDist/1000).toFixed(1) + ' км'
+      : totalDist + ' м';
+    document.getElementById('res-time').textContent = formatDuration(totalDur);
+    document.getElementById('res-legs').textContent = legLines.join('\n');
+    document.getElementById('route-result').style.display = 'block';
+  });
+}
+
+function formatDuration(seconds) {
+  const h = Math.floor(seconds / 3600);
+  const m = Math.round((seconds % 3600) / 60);
+  if (h > 0) return `${h}ч ${m}м`;
+  return `${m} мин`;
+}
+
+// ── CLEAR ──
+function clearRoute() {
+  pois = [];
+  savePOIs();
+  markers.forEach(m => m.setMap(null));
+  markers = [];
+  if (directionsRenderer) directionsRenderer.setDirections({ routes: [] });
+  document.getElementById('route-result').style.display = 'none';
+  renderPOIList();
+  updateCalcBtn();
+}
+function clearRouteDisplay() {
+  if (directionsRenderer) directionsRenderer.setDirections({ routes: [] });
+  document.getElementById('route-result').style.display = 'none';
+}
+
+function updateCalcBtn() {
+  document.getElementById('calc-btn').disabled = pois.length < 2 || !mapInstance;
+}
+
+// ── INIT ──
+loadPOIs();
+
+const savedKey = getKey();
+if (savedKey) {
+  showKeyBanner(true);
+  loadMapsAPI(savedKey);
+} else {
+  showKeyBanner(false);
+}
+</script>
+</body>
+</html>

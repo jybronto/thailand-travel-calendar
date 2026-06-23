@@ -452,9 +452,24 @@ body {
 </head>
 <body>
 
+<style>
+.nav-tabs { display:flex; align-items:stretch; margin-left:16px; }
+.nav-tab {
+  display:flex; align-items:center; gap:6px;
+  padding:0 16px; font-size:14px; font-weight:500;
+  color:var(--text2); text-decoration:none;
+  border-bottom:2px solid transparent; transition:all .12s;
+}
+.nav-tab:hover { color:var(--text); }
+.nav-tab.active { color:var(--accent); border-bottom-color:var(--accent); }
+</style>
 <header class="app-header">
   <span class="plane-icon">✈</span>
   <h1>Bangkok Trip 2026</h1>
+  <nav class="nav-tabs">
+    <a href="index.html" class="nav-tab active">🗓 Календарь</a>
+    <a href="map.html"   class="nav-tab">🗺 Маршрут</a>
+  </nav>
   <div class="header-meta">
     <div class="header-stat">
       <div class="hs-label">Вылет</div>
